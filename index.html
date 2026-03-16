@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Paradise | สวรรค์ทะเลอันดามัน</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Kanit -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Kanit', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#0ea5e9',
+                        secondary: '#0284c7',
+                        accent: '#f59e0b',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&q=80&w=1920');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0% { transform: translate(0,  0px); }
+            50%  { transform: translate(0, -10px); }
+            100%   { transform: translate(0, -0px); }
+        }
+        /* Hide scrollbar for smooth UI */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0ea5e9; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0284c7; 
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Navbar -->
+    <nav class="bg-white/95 backdrop-blur-sm shadow-md fixed w-full z-50 top-0 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center cursor-pointer transform transition hover:scale-105" onclick="showView('home-view')">
+                    <i class="fa-solid fa-umbrella-beach text-primary text-2xl mr-2 floating"></i>
+                    <span class="font-bold text-xl tracking-wide text-gray-800">Trang<span class="text-primary">Paradise</span></span>
+                </div>
+                
+                <!-- Desktop Menu (5 Items) -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <button onclick="showView('home-view')" class="text-gray-600 hover:text-primary transition font-medium hover:scale-105">หน้าหลัก</button>
+                    <button onclick="showView('home-view'); setTimeout(() => document.getElementById('destinations').scrollIntoView(), 100);" class="text-gray-600 hover:text-primary transition font-medium hover:scale-105">เกาะยอดฮิต</button>
+                    <button onclick="showView('food-view')" class="text-gray-600 hover:text-primary transition font-medium hover:scale-105">ร้านอาหารแนะนำ</button>
+                    <button onclick="showView('hotels-view')" class="text-gray-600 hover:text-primary transition font-medium hover:scale-105">ที่พัก & โรงแรม</button>
+                    <button onclick="showView('contact-view')" class="text-gray-600 hover:text-primary transition font-medium hover:scale-105">ติดต่อเรา</button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()" class="text-gray-600 hover:text-primary transition focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl" id="mobile-menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-100 absolute w-full shadow-lg">
+            <div class="px-4 pt-2 pb-4 space-y-1 flex flex-col">
+                <button onclick="showView('home-view')" class="block px-3 py-3 text-left text-gray-600 hover:text-primary hover:bg-blue-50 rounded-md font-medium border-b border-gray-50">หน้าหลัก</button>
+                <button onclick="showView('home-view'); setTimeout(() => document.getElementById('destinations').scrollIntoView(), 100);" class="block px-3 py-3 text-left text-gray-600 hover:text-primary hover:bg-blue-50 rounded-md font-medium border-b border-gray-50">เกาะยอดฮิต</button>
+                <button onclick="showView('food-view')" class="block px-3 py-3 text-left text-gray-600 hover:text-primary hover:bg-blue-50 rounded-md font-medium border-b border-gray-50">ร้านอาหารแนะนำ</button>
+                <button onclick="showView('hotels-view')" class="block px-3 py-3 text-left text-gray-600 hover:text-primary hover:bg-blue-50 rounded-md font-medium border-b border-gray-50">ที่พัก & โรงแรม</button>
+                <button onclick="showView('contact-view')" class="block px-3 py-3 text-left text-gray-600 hover:text-primary hover:bg-blue-50 rounded-md font-medium">ติดต่อเรา</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="pt-16 min-h-screen flex flex-col relative">
+        
+        <!-- ================= HOME VIEW ================= -->
+        <div id="home-view" class="block flex-grow">
+            <!-- Hero Section -->
+            <section class="hero-bg h-[70vh] flex items-center justify-center text-center px-4 relative overflow-hidden">
+                <div class="text-white max-w-4xl z-10" data-aos="zoom-in" data-aos-duration="1000">
+                    <span class="text-accent font-semibold tracking-widest uppercase text-sm md:text-base mb-2 block">Explore The Unseen</span>
+                    <h1 class="text-5xl md:text-7xl font-bold mb-6 text-shadow-lg leading-tight">สวรรค์แห่งทะเลตรัง</h1>
+                    <p class="text-xl md:text-2xl mb-10 font-light opacity-90">ค้นพบความมหัศจรรย์ของ 10 สถานที่ท่องเที่ยวทางทะเลที่ดีที่สุด ที่รอให้คุณมาสัมผัสด้วยตัวเอง</p>
+                    <button onclick="document.getElementById('destinations').scrollIntoView({behavior: 'smooth'})" class="bg-primary hover:bg-secondary text-white font-semibold py-4 px-10 rounded-full transition duration-300 shadow-xl inline-block transform hover:-translate-y-1 hover:scale-105">
+                        <i class="fa-solid fa-compass mr-2"></i> เริ่มต้นการเดินทาง
+                    </button>
+                </div>
+                
+                <!-- Decorative wave bottom -->
+                <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
+                    <svg class="relative block w-full h-[50px] md:h-[100px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,121.22,200.5,115.1,241.69,111.45,282.88,89.5,321.39,56.44Z" fill="#f9fafb"></path>
+                    </svg>
+                </div>
+            </section>
+
+            <!-- Destinations Section -->
+            <section id="destinations" class="py-20 bg-gray-50 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16" data-aos="fade-up">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-4">10 จุดหมายปลายทางห้ามพลาด</h2>
+                    <div class="w-24 h-1 bg-primary mx-auto mb-6 rounded-full"></div>
+                    <p class="text-gray-600 max-w-2xl mx-auto text-lg">รวบรวมเกาะสวย น้ำใส ปะการังสมบูรณ์ และวิถีชีวิตชาวเลที่เต็มไปด้วยมนต์เสน่ห์แห่งอันดามัน</p>
+                </div>
+
+                <!-- Islands Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="islands-grid">
+                    <!-- Cards will be injected by JavaScript -->
+                </div>
+            </section>
+        </div>
+
+
+        <!-- ================= DETAIL VIEW ================= -->
+        <div id="detail-view" class="hidden flex-grow pb-20 bg-white">
+            <!-- Hero specific to the island -->
+            <div id="detail-hero" class="h-[50vh] bg-cover bg-center relative bg-fixed">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end pb-12 px-4">
+                    <div class="max-w-7xl mx-auto w-full" data-aos="fade-up">
+                        <span id="detail-badge" class="bg-primary text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block">Trang Island</span>
+                        <h1 id="detail-title" class="text-4xl md:text-6xl font-bold text-white mb-2 text-shadow">ชื่อเกาะ</h1>
+                        <p id="detail-subtitle" class="text-xl md:text-2xl text-gray-200 font-light">คำโปรย</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+                <button onclick="goHome()" class="mb-8 inline-flex items-center text-gray-500 hover:text-primary font-medium transition group bg-white border border-gray-200 px-4 py-2 rounded-full shadow-sm hover:shadow">
+                    <i class="fa-solid fa-arrow-left mr-2 transform group-hover:-translate-x-1 transition"></i> ย้อนกลับไปหน้าหลัก
+                </button>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                    <!-- Left Column: Invite, History, Activities -->
+                    <div class="lg:col-span-2 space-y-10">
+                        <!-- Invite -->
+                        <section data-aos="fade-up" class="bg-gradient-to-br from-blue-50 to-white p-8 rounded-3xl shadow-sm border border-blue-100 relative overflow-hidden">
+                            <i class="fa-solid fa-quote-left absolute top-4 right-6 text-6xl text-blue-100 opacity-50"></i>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center relative z-10">
+                                <i class="fa-solid fa-heart text-red-500 mr-3 animate-pulse"></i> ทำไมต้องมาที่นี่?
+                            </h3>
+                            <p id="detail-invite" class="text-gray-700 leading-relaxed text-lg relative z-10">
+                                ข้อความเชิญชวน...
+                            </p>
+                        </section>
+
+                        <!-- History -->
+                        <section data-aos="fade-up" data-aos-delay="100">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center border-b pb-3">
+                                <i class="fa-solid fa-book-open text-primary mr-3"></i> ประวัติและข้อมูลที่น่าสนใจ
+                            </h3>
+                            <p id="detail-history" class="text-gray-600 leading-relaxed text-lg text-justify indent-8">
+                                ประวัติ...
+                            </p>
+                        </section>
+
+                        <!-- Highlights/Activities -->
+                        <section data-aos="fade-up" data-aos-delay="200">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center border-b pb-3">
+                                <i class="fa-solid fa-camera-retro text-accent mr-3"></i> กิจกรรมไฮไลท์
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="detail-activities">
+                                <!-- Activities injected via JS -->
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Right Column: Hotels & Contact -->
+                    <div class="space-y-8">
+                        <!-- Hotels -->
+                        <div data-aos="fade-left" class="bg-white p-6 rounded-3xl border border-gray-100 shadow-lg">
+                            <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                                    <i class="fa-solid fa-hotel text-secondary"></i>
+                                </div>
+                                ที่พักแนะนำใกล้เคียง
+                            </h3>
+                            <ul id="detail-hotels" class="space-y-4">
+                                <!-- Hotels injected via JS -->
+                            </ul>
+                            <div class="mt-6 text-center border-t border-gray-100 pt-4">
+                                <button onclick="showView('hotels-view')" class="text-primary hover:text-secondary font-medium text-sm transition flex items-center justify-center w-full">
+                                    ดูที่พักทั้งหมด <i class="fa-solid fa-arrow-right ml-2"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Contact -->
+                        <div data-aos="fade-left" data-aos-delay="100" class="bg-gray-900 p-6 rounded-3xl text-white shadow-lg relative overflow-hidden">
+                            <!-- Background decoration -->
+                            <div class="absolute -right-10 -top-10 w-32 h-32 bg-primary rounded-full blur-3xl opacity-20"></div>
+                            <div class="absolute -left-10 -bottom-10 w-32 h-32 bg-accent rounded-full blur-3xl opacity-20"></div>
+                            
+                            <h3 class="text-xl font-bold mb-6 flex items-center relative z-10">
+                                <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center mr-3">
+                                    <i class="fa-solid fa-headset text-accent"></i>
+                                </div>
+                                ข้อมูลการติดต่อ
+                            </h3>
+                            
+                            <div class="space-y-5 relative z-10">
+                                <div>
+                                    <p class="text-sm text-gray-400 mb-1"><i class="fa-regular fa-id-badge mr-2"></i>หน่วยงาน/เจ้าหน้าที่</p>
+                                    <p id="detail-contact-name" class="font-medium text-white"></p>
+                                </div>
+                                <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/5 transition hover:bg-white/20 cursor-pointer">
+                                    <p class="text-sm text-gray-400 mb-1">เบอร์โทรศัพท์ติดต่อ</p>
+                                    <div class="flex items-center">
+                                        <i class="fa-solid fa-phone-volume text-green-400 mr-3 text-xl"></i>
+                                        <span id="detail-phone" class="font-bold text-2xl tracking-wider text-white"></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-400 mb-1"><i class="fa-solid fa-anchor mr-2"></i>จุดขึ้นเรือ/พิกัด</p>
+                                    <p id="detail-pier" class="text-gray-300 flex items-start text-sm leading-relaxed">
+                                        <span id="detail-pier-text"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= FOOD VIEW (หน้าร้านอาหาร) ================= -->
+        <div id="food-view" class="hidden flex-grow pb-20 bg-gray-50">
+            <div class="bg-accent pt-16 pb-24 text-center px-4 relative overflow-hidden">
+                <div class="absolute inset-0 bg-black/20"></div>
+                <!-- Food decoration icons -->
+                <i class="fa-solid fa-mug-hot absolute top-10 left-10 text-6xl text-white/10 transform -rotate-12"></i>
+                <i class="fa-solid fa-bowl-food absolute bottom-10 right-10 text-6xl text-white/10 transform rotate-12"></i>
+                
+                <div class="relative z-10">
+                    <h1 class="text-4xl md:text-5xl font-bold text-white mb-4" data-aos="fade-up">ของอร่อยเมืองตรัง</h1>
+                    <p class="text-white/90 text-lg max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">"เมืองของกิน" ตรังไม่ได้มีดีแค่ทะเล แต่ยังเป็นสวรรค์ของนักชิม ที่คุณต้องมาลิ้มลอง!</p>
+                </div>
+            </div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-20">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Food 1 -->
+                    <div class="bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100 group" data-aos="fade-up">
+                        <div class="relative overflow-hidden h-56">
+                            <img src="https://media-cdn.tripadvisor.com/media/photo-s/1c/df/39/d7/caption.jpg" alt="หมูย่างเมืองตรัง" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                            <div class="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">Must Try</div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2 group-hover:text-accent transition">หมูย่างเมืองตรัง</h3>
+                            <p class="text-sm font-medium text-gray-500 mb-4"><i class="fa-solid fa-shop mr-2"></i>พงษ์โอชา, ตรังหมูย่าง</p>
+                            <p class="text-gray-600 leading-relaxed mb-4">เอกลักษณ์ที่ไม่เหมือนใคร หมูย่างหนังกรอบ เนื้อนุ่ม ชุ่มฉ่ำด้วยเครื่องเทศสูตรลับเฉพาะ ทานคู่กับกาแฟโบราณยามเช้าคือที่สุด</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Food 2 -->
+                    <div class="bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100 group" data-aos="fade-up" data-aos-delay="100">
+                        <div class="relative overflow-hidden h-56">
+                            <img src="https://tangmo3110.wordpress.com/wp-content/uploads/2015/01/20140303_3_1393800609_437992.jpg" alt="ติ่มซำ" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2 group-hover:text-accent transition">ติ่มซำต้นตำรับ</h3>
+                            <p class="text-sm font-medium text-gray-500 mb-4"><i class="fa-solid fa-shop mr-2"></i>เรือนไทยติ่มซำ, เลตรัง 2</p>
+                            <p class="text-gray-600 leading-relaxed mb-4">วัฒนธรรมการกินยามเช้าของชาวตรัง เลือกติ่มซำนึ่งสดใหม่ร้อนๆ หลากหลายหน้า ทานคู่กับหมูย่างและน้ำจิ้มส้มเจื้องสุดคลาสสิก</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Food 3 -->
+                    <div class="bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100 group" data-aos="fade-up" data-aos-delay="200">
+                        <div class="relative overflow-hidden h-56">
+                            <img src="https://image.bangkokbiznews.com/image/kt/media/image/news/2018/09/21/692/750x422XAPxtTikFYQuDRWE.jpg" alt="อาหารทะเล" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2 group-hover:text-accent transition">ซีฟู้ดสดจากทะเล</h3>
+                            <p class="text-sm font-medium text-gray-500 mb-4"><i class="fa-solid fa-shop mr-2"></i>ครูหนูซีฟู้ด, ปูม้าปาร์ตี้</p>
+                            <p class="text-gray-600 leading-relaxed mb-4">มาทะเลทั้งทีพลาดไม่ได้กับอาหารทะเลสดๆ ทั้งกุ้ง หอย ปู ปลา ที่จับสดๆ จากทะเลอันดามัน ปรุงรสจัดจ้านสไตล์ปักษ์ใต้แท้ๆ</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= HOTELS VIEW (หน้าโรงแรม) ================= -->
+        <div id="hotels-view" class="hidden flex-grow pb-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
+                <div class="text-center mb-16" data-aos="fade-up">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-4">ที่พัก & โรงแรมยอดนิยม</h2>
+                    <div class="w-24 h-1 bg-secondary mx-auto mb-6 rounded-full"></div>
+                    <p class="text-gray-600 max-w-2xl mx-auto text-lg">คัดสรรที่พักบรรยากาศดี ทั้งบนเกาะและบนฝั่ง เพื่อการพักผ่อนที่สมบูรณ์แบบของคุณ คลิกเพื่อดูรายละเอียดและสิ่งอำนวยความสะดวก</p>
+                </div>
+                
+                <!-- Grid จะถูกสร้างด้วย Javascript -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="hotels-grid">
+                    <!-- Hotels injected via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= CONTACT VIEW (หน้าผู้จัดทำ) ================= -->
+        <div id="contact-view" class="hidden flex-grow pb-20 bg-gray-50">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+                <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100" data-aos="zoom-in">
+                    <!-- Header Background -->
+                    <div class="h-48 bg-gradient-to-r from-primary to-secondary relative">
+                        <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 20px 20px;"></div>
+                    </div>
+                    
+                    <!-- Profile Content -->
+                    <div class="px-8 pb-12 relative">
+                        <!-- Profile Picture -->
+                        <div class="flex justify-center -mt-24 mb-6 relative z-10">
+                            <div class="w-48 h-48 rounded-full border-4 border-white shadow-2xl overflow-hidden bg-white">
+                                <!-- รูปโปรไฟล์ผู้จัดทำ -->
+                                <img src="wi.jpg" alt="ภาพโปรไฟล์ผู้จัดทำ" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                        
+                        <!-- Info -->
+                        <div class="text-center">
+                            <h2 class="text-3xl font-bold text-gray-800 mb-2">นางสาว วรนิษฐา แก่นแก้ว</h2>
+                            <p class="text-primary font-medium text-lg mb-6"><i class="fa-solid fa-laptop-code mr-2"></i>ผู้จัดทำเว็บไซต์ / Web Developer</p>
+                            
+                            <p class="text-gray-600 max-w-2xl mx-auto leading-relaxed mb-10 text-justify md:text-center">
+                                เว็บไซต์ Trang Paradise นีั้ถูกจัดทำขึ้นด้วยความตั้งใจที่จะรวบรวมและนำเสนอข้อมูลสถานที่ท่องเที่ยวที่สวยงามในจังหวัดตรัง เพื่อส่งเสริมการท่องเที่ยวเชิงอนุรักษ์ ให้นักท่องเที่ยวได้เข้าถึงข้อมูลที่ถูกต้องและเป็นประโยชน์ที่สุดก่อนการเดินทาง
+                            </p>
+                            
+                            <!-- Contact Details Grid -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto text-left mb-10">
+                                <div class="bg-gray-50 p-4 rounded-xl flex items-center border border-gray-100 hover:border-primary transition">
+                                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-primary mr-4 shrink-0">
+                                        <i class="fa-solid fa-envelope text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-400">อีเมล</p>
+                                        <p class="text-gray-800 font-medium">Woranitta4273@gmail.com</p>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-xl flex items-center border border-gray-100 hover:border-green-500 transition">
+                                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-4 shrink-0">
+                                        <i class="fa-solid fa-phone text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-400">เบอร์โทรศัพท์</p>
+                                        <p class="text-gray-800 font-medium">0823356943
+</p>
+                                    </div>
+                                </div>
+                                
+                                    
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-xl flex items-center border border-gray-100 hover:border-pink-500 transition">
+                                    <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 mr-4 shrink-0">
+                                        <i class="fa-solid fa-location-dot text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-400">ที่อยู่ / สถานศึกษา</p>
+                                        <p class="text-gray-800 font-medium">วิทยลัยอาชีวศึกษาโปลีเทคนิคตรัง</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Social Links -->
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= HOTEL DETAIL MODAL (ป๊อปอัปดูที่พัก) ================= -->
+        <div id="hotel-modal" class="fixed inset-0 z-[100] hidden items-center justify-center px-4 transition-all duration-300">
+            <!-- Backdrop -->
+            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeHotelModal()"></div>
+            
+            <!-- Modal Box -->
+            <div id="hotel-modal-content" class="bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl relative z-10 transform scale-95 opacity-0 transition-all duration-300">
+                <!-- Close Button -->
+                <button onclick="closeHotelModal()" class="absolute top-4 right-4 w-10 h-10 bg-black/20 hover:bg-black/50 backdrop-blur-md text-white rounded-full flex items-center justify-center transition z-20">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+                
+                <!-- Content -->
+                <div class="relative h-64 md:h-80 w-full">
+                    <img id="modal-hotel-img" src="" alt="Hotel" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
+                        <div class="flex items-center text-primary font-bold mb-1">
+                            <span class="bg-white px-3 py-1 rounded-full text-xs shadow"><i class="fa-solid fa-location-dot mr-1"></i><span id="modal-hotel-location"></span></span>
+                        </div>
+                        <h2 id="modal-hotel-name" class="text-3xl md:text-4xl font-bold text-white text-shadow-lg"></h2>
+                    </div>
+                </div>
+                
+                <div class="p-6 md:p-8">
+                    <p id="modal-hotel-desc" class="text-gray-700 leading-relaxed mb-8 text-lg bg-gray-50 p-6 rounded-2xl border border-gray-100"></p>
+                    
+                    <h3 class="text-xl font-bold text-gray-800 mb-4"><i class="fa-solid fa-sparkles text-accent mr-2"></i>สิ่งอำนวยความสะดวก</h3>
+                    <div id="modal-hotel-fac" class="flex flex-wrap gap-3 mb-8">
+                        <!-- Facilities injected here -->
+                    </div>
+                    
+                    <div class="bg-blue-50 p-6 rounded-2xl flex flex-col md:flex-row items-center justify-between border border-blue-100">
+                        <div class="mb-4 md:mb-0 text-center md:text-left">
+                            <p class="text-sm text-gray-500 mb-1">ติดต่อสอบถาม / จองที่พัก</p>
+                            <p id="modal-hotel-contact" class="font-bold text-2xl text-primary tracking-wide"></p>
+                        </div>
+                        <button onclick="closeHotelModal()" class="bg-primary hover:bg-secondary text-white px-8 py-3 rounded-full font-bold transition shadow-md flex items-center">
+                            <i class="fa-solid fa-phone-volume mr-2"></i> ติดต่อที่พักเลย
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8 mt-auto border-t-4 border-primary">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 text-center md:text-left">
+                <div>
+                    <h2 class="text-3xl font-bold mb-4">Trang<span class="text-primary">Paradise</span></h2>
+                    <p class="text-gray-400 leading-relaxed">แพลตฟอร์มรวบรวมข้อมูลการท่องเที่ยวเชิงอนุรักษ์ มุ่งเน้นการให้ข้อมูลที่ถูกต้องเพื่อส่งเสริมการท่องเที่ยวจังหวัดตรังอย่างยั่งยืน</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">ลิงก์ด่วน</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" onclick="showView('home-view')" class="hover:text-primary transition">หน้าหลัก</a></li>
+                        <li><a href="#" onclick="showView('home-view'); setTimeout(() => document.getElementById('destinations').scrollIntoView(), 100);" class="hover:text-primary transition">เกาะยอดฮิต 10 แห่ง</a></li>
+                        <li><a href="#" onclick="showView('contact-view')" class="hover:text-primary transition">ติดต่อเรา (ผู้จัดทำ)</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">ติดตามเรา</h3>
+                    <div class="flex justify-center md:justify-start space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-white transition duration-300 transform hover:scale-110"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-pink-600 hover:text-white transition duration-300 transform hover:scale-110"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-green-500 hover:text-white transition duration-300 transform hover:scale-110"><i class="fa-brands fa-line"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
+                &copy;  | <i class="fa-solid fa-heart text-red-500"></i> Made for Trang
+            </div>
+        </div>
+    </footer>
+
+    <!-- AOS Animation JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- JavaScript Data and Logic -->
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+        });
+
+        // ------------------ DATA SECTION ------------------ //
+
+        // Database of 10 Islands
+        const islandsData = [
+            {
+                id: 'kradan',
+                name: 'เกาะกระดาน',
+                subtitle: 'หาดทรายที่ดีที่สุดในโลก อันดับ 1 ปี 2023',
+                image: 'https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1295,h_862/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/ll3klme6k1va0beiougq/%E0%B8%97%E0%B8%B1%E0%B8%A7%E0%B8%A3%E0%B9%8C%E0%B9%80%E0%B8%81%E0%B8%B2%E0%B8%B0%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B8%94%E0%B8%B2%E0%B8%99,%E0%B9%80%E0%B8%81%E0%B8%B2%E0%B8%B0%E0%B9%80%E0%B8%8A%E0%B8%B7%E0%B8%AD%E0%B8%81,%E0%B9%80%E0%B8%81%E0%B8%B2%E0%B8%B0%E0%B9%81%E0%B8%AB%E0%B8%A7%E0%B8%99%E0%B9%81%E0%B8%A5%E0%B8%B0%E0%B8%96%E0%B9%89%E0%B8%B3%E0%B8%A1%E0%B8%A3%E0%B8%81%E0%B8%95%E0%B9%83%E0%B8%99%E0%B8%95%E0%B8%A3%E0%B8%B1%E0%B8%87.jpg',
+                heroImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3AD8huPHkIYBZim70Z_lIkBBf3dcaTKIw8A&s',
+                invite: 'หนีความวุ่นวายมาพักผ่อนบน "เกาะที่ได้ชื่อว่ามีชายหาดที่ดีที่สุดในโลก" สัมผัสความโรแมนติกของหาดทรายที่ขาวละเอียดดุจแป้ง น้ำทะเลสีฟ้าใสจนมองเห็นปะการังน้ำตื้นได้อย่างชัดเจน เหมาะอย่างยิ่งสำหรับคู่รักและครอบครัวที่ต้องการความเงียบสงบและธรรมชาติที่สมบูรณ์แบบ',
+                history: 'เกาะกระดานเป็นเกาะที่สวยที่สุดในท้องทะเลตรัง มีพื้นที่ประมาณ 600 ไร่ ส่วนหนึ่งอยู่ในความดูแลของอุทยานแห่งชาติหาดเจ้าไหม และอีกส่วนเป็นพื้นที่เอกชน เกาะนี้มีชื่อเสียงโด่งดังไปทั่วโลกจากการเป็นสถานที่จัดงาน "วิวาห์ใต้สมุทร" (Underwater Wedding Ceremony) ที่เป็นเอกลักษณ์ของจังหวัดตรัง ซึ่งจัดขึ้นในช่วงวันวาเลนไทน์ของทุกปี นอกจากนี้ในปี 2023 เว็บไซต์ World Beach Guide ได้จัดอันดับให้หาดทรายของเกาะกระดานเป็นชายหาดที่ดีที่สุดในโลกอันดับ 1 อีกด้วย',
+                activities: ['ดำน้ำตื้นดูปะการังหน้าหาด', 'ชมพระอาทิตย์ขึ้นที่หาดเกาะกระดาน', 'พายเรือคายัคใสรอบเกาะ', 'เดินเล่นบนทรายที่นุ่มเหมือนแป้ง'],
+                hotels: [
+                    { name: 'The Sevenseas Resort', desc: 'รีสอร์ทหรูติดหาดทรายขาว บรรยากาศพรีเมียม มีสระว่ายน้ำ' },
+                    { name: 'Kradan Beach Resort', desc: 'ที่พักยอดฮิต เดินลงน้ำทะเลได้จากหน้าห้องพัก' }
+                ],
+                contactName: 'อุทยานแห่งชาติหาดเจ้าไหม',
+                phone: '075-813-280',
+                pier: 'ท่าเรือปากเมง อ.สิเกา (มีเรือหางยาวและเรือสปีดโบ๊ทให้บริการ)'
+            },
+            {
+                id: 'mook',
+                name: 'เกาะมุก (ถ้ำมรกต)',
+                subtitle: 'มหัศจรรย์ถ้ำมรกต อัญมณีแห่งอันดามัน',
+                image: 'https://cbtthailand.dasta.or.th/upload-file-api/Resources/RelateAttraction/Images/RAT920027/1.jpeg',
+                heroImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFXY6zVldBA5Ah2QnyOQYPgYm3rUAsWpKDXg&s',
+                invite: 'ร่วมค้นหาความลับที่ซ่อนอยู่หลังหน้าผาสูงชัน ลอยตัวผ่านความมืดมิดของโพรงถ้ำ สู่หาดทรายลับที่อาบด้วยแสงแดดและน้ำทะเลสีเขียวมรกต นี่คือประสบการณ์ "อันซีนไทยแลนด์" ที่คุณต้องมาสัมผัสด้วยตัวเองสักครั้งในชีวิต พร้อมสัมผัสวิถีชีวิตชาวประมงพื้นบ้านที่น่ารัก',
+                history: 'เกาะมุกเป็นเกาะที่ใหญ่เป็นอันดับ 3 ของทะเลตรัง นอกจากธรรมชาติที่สวยงามแล้ว ยังโดดเด่นด้วยวิถีชีวิตชาวประมงพื้นบ้านที่ชุมชนบ้านเกาะมุก ไฮไลท์ระดับโลกของเกาะนี้คือ "ถ้ำมรกต" (Emerald Cave) ซึ่งเกิดจากการยุบตัวของหินปูนในอดีต การจะเข้าไปชมความงามด้านในได้ ต้องสวมเสื้อชูชีพและว่ายน้ำลอยตัวเรียงแถวต่อกันเข้าไปในความมืดระยะทางประมาณ 80 เมตร เมื่อทะลุออกไปจะพบกับหาดทรายขาวที่มีหน้าผาโอบล้อมรอบทิศทาง คล้ายกับปากปล่องภูเขาไฟ',
+                activities: ['ลอยตัวเข้าถ้ำมรกต (ควรไปช่วงน้ำลง)', 'ชมพระอาทิตย์ตกที่หาดฝรั่ง', 'ปั่นจักรยานชมวิถีชีวิตชุมชนชาวเล', 'ทานอาหารทะเลสดๆ'],
+                hotels: [
+                    { name: 'Sivalai Beach Resort', desc: 'ตั้งอยู่บนแหลมทรายที่สวยที่สุด ชมวิวน้ำทะเลได้ 2 ฝั่ง' },
+                    { name: 'Koh Mook Charlie Beach Resort', desc: 'ใกล้หาดฝรั่ง จุดชมพระอาทิตย์ตกที่สวยที่สุด' }
+                ],
+                contactName: 'ศูนย์บริการนักท่องเที่ยวท่าเรือควนตุ้งกู',
+                phone: '081-894-6936',
+                pier: 'ท่าเรือควนตุ้งกู (ใช้เวลาเดินทางไปเกาะมุกเพียง 30-45 นาทีด้วยเรือหางยาว)'
+            },
+            {
+                id: 'libong',
+                name: 'เกาะลิบง',
+                subtitle: 'ดินแดนพะยูนใหญ่ แหล่งหญ้าทะเลสมบูรณ์',
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWXcVI1HG02KZ9UDEqc12tu-e_7e_2285qrA&s',
+                heroImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZqvO91rND4dhEMyzVujTg2wOBCkNWQA51sA&s',
+                invite: 'ปลีกวิเวกสู่เกาะที่ใหญ่ที่สุดของตรัง สัมผัสมนต์เสน่ห์ของชุมชนมุสลิมดั้งเดิม นั่งเรือหางยาวออกไปทักทาย "ฝูงพะยูน" ในแหล่งหญ้าทะเลที่อุดมสมบูรณ์ที่สุดในไทย และขึ้นหอคอยชมวิวท้องทะเลอันดามันแบบพาโนรามา',
+                history: 'เกาะลิบงเป็นเกาะที่ใหญ่ที่สุดในจังหวัดตรัง ตั้งอยู่ในเขตห้ามล่าสัตว์ป่าหมู่เกาะลิบง รอบๆ เกาะเต็มไปด้วยทุ่งหญ้าทะเลซึ่งเป็นแหล่งอาหารสำคัญของ "พะยูน" (Dugong) ทำให้ที่นี่เป็นบ้านของฝูงพะยูนที่ใหญ่ที่สุดในประเทศไทย บนเกาะมีหมู่บ้านชาวประมงมุสลิมที่ยังคงรักษาวิถีชีวิตดั้งเดิมไว้ได้อย่างเหนียวแน่น นอกจากนี้ยังมีจุดชมวิวหอคอยบาตูปูเต๊ะ ที่สามารถมองเห็นทะเลอันดามันในมุมกว้าง',
+                activities: ['นั่งเรือหางยาวชมฝูงพะยูน', 'เดินขึ้นหอคอยจุดชมวิว', 'ชมสะพานหินธรรมชาติ', 'ส่องนกอพยพ'],
+                hotels: [
+                    { name: 'Andalay Beach Resort Koh Libong', desc: 'ที่พักสไตล์บูทีค มีสระว่ายน้ำริมทะเล' },
+                    { name: 'Le Dugong Libong Resort', desc: 'ที่พักน่ารักเรียบง่าย ใกล้ชิดธรรมชาติ' }
+                ],
+                contactName: 'เขตห้ามล่าสัตว์ป่าหมู่เกาะลิบง',
+                phone: '075-251-932',
+                pier: 'ท่าเรือหาดยาว อ.กันตัง (มีเรือโดยสารประจำทางออกทุกชั่วโมง)'
+            },
+            {
+                id: 'sukorn',
+                name: 'เกาะสุกร',
+                subtitle: 'เกาะสวรรค์ไร้หมู ขึ้นชื่อแตงโมหวานฉ่ำ',
+                image: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/17/49/0a/4a/egg-island-a-stop-over.jpg?w=600&h=400&s=1',
+                heroImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6Up6AK1wUvMOKtY_IMrl3HW8IvazD1jFrKg&s',
+                invite: 'หลีกหนีความจำเจ ปั่นจักรยานรับลมเย็นๆ รอบเกาะที่เงียบสงบ ชมหาดทรายสีน้ำตาลทองแปลกตา แวะทักทายชาวบ้านรอยยิ้มพิมพ์ใจ และที่พลาดไม่ได้คือการชิม "แตงโมเกาะสุกร" ที่ได้ชื่อว่าหวานกรอบอร่อยที่สุดในภาคใต้!',
+                history: 'เกาะสุกร หรือที่ชาวบ้านเรียกติดปากว่า "เกาะหมู" เป็นเกาะที่มีความแปลกคือ แม้ชื่อจะแปลว่าหมู แต่บนเกาะนี้ไม่มีหมูและสุนัขเลย เนื่องจากประชากรส่วนใหญ่ร้อยละ 99 นับถือศาสนาอิสลาม เกาะนี้ไม่ได้โดดเด่นเรื่องหาดทรายขาวแจ๋ว แต่กลับมีเสน่ห์ดึงดูดด้วยความเป็นมิตรของชาวบ้าน ท้องทุ่งนาบนเกาะ ควายน้ำ และไฮไลท์สำคัญคือ "แตงโม" ที่ปลูกริมชายหาด',
+                activities: ['ปั่นจักรยานรอบเกาะ', 'ชมทุ่งนาและฝูงควายริมทะเล', 'ชิมแตงโมเกาะสุกร', 'ชมการทำผ้าบาติก'],
+                hotels: [
+                    { name: 'Yataa Resort', desc: 'รีสอร์ทดีไซน์สวย ทันสมัย มีสิ่งอำนวยความสะดวกครบครัน สระว่ายน้ำใหญ่' },
+                    { name: 'Sukorn Cabana Resort', desc: 'อาหารใต้รสจัดจ้านอร่อยมาก บริการประทับใจ' }
+                ],
+                contactName: 'องค์การบริหารส่วนตำบลเกาะสุกร',
+                phone: '075-207-914',
+                pier: 'ท่าเรือตะเซะ อ.ปะเหลียน (ใช้เวลาข้ามฟากเพียง 15-20 นาที)'
+            },
+            {
+                id: 'ngai',
+                name: 'เกาะไหง',
+                subtitle: 'สวรรค์ของคนรักความสงบ ทะเลใสปิ๊ง',
+                image: 'https://img-ha.mthcdn.com/zVCxMCAALi_WjT96jKOIqHWmesU=/travel.mthai.com/app/uploads/2015/02/eecc7791.jpg',
+                heroImage: 'https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&q=80&w=1920',
+                invite: 'ถ้าคุณกำลังมองหาที่พักผ่อนริมทะเลแบบไพรเวท ไม่มีรถยนต์วิ่งพล่าน มีเพียงเสียงคลื่น ทรายขาวๆ และน้ำทะเลใสแจ๋วที่สามารถดำน้ำดูปะการังได้จากหน้าหาด "เกาะไหง" คือคำตอบที่ดีที่สุด',
+                history: 'แม้ตามพิกัดทางภูมิศาสตร์ เกาะไหงจะตั้งอยู่ในเขตจังหวัดกระบี่ แต่การเดินทางที่สะดวกที่สุดและใกล้ที่สุดคือการนั่งเรือจากฝั่งจังหวัดตรัง ทำให้นักท่องเที่ยวนิยมจัดเกาะไหงรวมอยู่ในโปรแกรมเที่ยวทะเลตรัง เกาะไหงเป็นเกาะขนาดเล็กที่ไม่มีถนน ไม่มีรถยนต์ จุดเด่นคือน้ำทะเลที่ใสมาก',
+                activities: ['อาบแดดบนหาดทราย', 'ดำน้ำตื้นดูปะการัง', 'พายแพดเดิลบอร์ด', 'ชมพระอาทิตย์ขึ้น'],
+                hotels: [
+                    { name: 'Thanya Beach Resort', desc: 'รีสอร์ทสไตล์ทรอปิคอล ตกแต่งสวยงาม ร่มรื่น' },
+                    { name: 'Koh Hai Fantasy Resort & Spa', desc: 'รีสอร์ทขนาดใหญ่ สิ่งอำนวยความสะดวกครบ' }
+                ],
+                contactName: 'ททท. สำนักงานตรัง',
+                phone: '075-215-867',
+                pier: 'ท่าเรือปากเมง จังหวัดตรัง'
+            },
+            {
+                id: 'chuek',
+                name: 'เกาะเชือก',
+                subtitle: 'จุดดำน้ำปะการังอ่อนเจ็ดสี',
+                image: 'https://popwaranya.wordpress.com/wp-content/uploads/2015/03/trang27.jpg',
+                heroImage: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&q=80&w=1920',
+                invite: 'เตรียมหน้ากากดำน้ำให้พร้อม! แล้วกระโดดลงสู่โลกใต้น้ำที่ "เกาะเชือก" ตื่นตาตื่นใจกับปะการังอ่อนเจ็ดสี กัลปังหา และฝูงปลาการ์ตูนนับพันตัวที่แหวกว่ายอยู่รอบๆ',
+                history: 'เกาะเชือก เป็นเกาะหินปูนขนาดเล็ก 2 เกาะคู่กัน ไม่มีชายหาด ความมหัศจรรย์ซ่อนอยู่ใต้น้ำ เนื่องจากเป็นจุดที่มีกระแสน้ำไหลผ่าน ทำให้มีแพลงก์ตอนอุดมสมบูรณ์ ส่งผลให้ปะการังอ่อนหลากสีสามารถเจริญเติบโตได้ดีมาก การดำน้ำที่นี่นักท่องเที่ยวต้องจับเชือกที่ผูกไว้',
+                activities: ['ดำน้ำตื้นชมปะการัง 7 สี', 'ว่ายน้ำกับฝูงปลา', 'ถ่ายภาพใต้น้ำ'],
+                hotels: [
+                    { name: 'ไม่มีที่พักบนเกาะ', desc: 'เป็นเกาะสำหรับดำน้ำเท่านั้น' }
+                ],
+                contactName: 'อุทยานแห่งชาติหาดเจ้าไหม',
+                phone: '075-813-280',
+                pier: 'ท่าเรือปากเมง'
+            },
+            {
+                id: 'ma',
+                name: 'เกาะม้า',
+                subtitle: 'เกาะรูปหัวม้า แหล่งชมดอกไม้ทะเล',
+                image: 'https://static.thairath.co.th/media/HCtHFA7ele6Q2dUKCCNG2SZZoMbtTd4yFUSQhB2VHL6WyMCcpnwFyJVaIY8GvuGAdk.jpg',
+                heroImage: 'https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?auto=format&fit=crop&q=80&w=1920',
+                invite: 'แวะเช็คอินถ่ายรูปกับเกาะหินปูนที่มีรูปร่างคล้าย "หัวม้า" กลางทะเล แล้วสวมชูชีพกระโดดน้ำไปทักทายครอบครัวปลานีโม่ที่ซ่อนตัวอยู่ในดงดอกไม้ทะเล',
+                history: 'เกาะม้า ตั้งอยู่ใกล้กับเกาะเชือก เป็นเกาะหินปูนที่ไม่มีชายหาด ลักษณะเด่นของเกาะนี้เมื่อมองจากระยะไกลจะเห็นส่วนของหน้าผาที่ยื่นออกมาคล้ายกับส่วนหัวของม้า บริเวณรอบๆ เกาะม้าเป็นจุดดำน้ำตื้นที่มีชื่อเสียงในเรื่องของ "ดอกไม้ทะเล" ที่ปกคลุมพื้นทราย',
+                activities: ['ชมทุ่งดอกไม้ทะเล', 'ตามหาปลาการ์ตูน', 'ถ่ายรูปวิวหัวม้า'],
+                hotels: [
+                    { name: 'ไม่มีที่พักบนเกาะ', desc: 'เป็นเกาะสำหรับทริปดำน้ำเท่านั้น' }
+                ],
+                contactName: 'อุทยานแห่งชาติหาดเจ้าไหม',
+                phone: '075-813-280',
+                pier: 'ท่าเรือปากเมง'
+            },
+            {
+                id: 'laoliang',
+                name: 'เกาะเหลาเหลียง',
+                subtitle: 'แคมป์ปิ้งสุดชิล ใต้หน้าผาหินปูน',
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtyavbVe7oDAl8Xh_IEKyYvGn5GTd3oHyxfA&s',
+                heroImage: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=1920',
+                invite: 'สัมผัสประสบการณ์นอนเต็นท์หรูริมชายหาดที่มีฉากหลังเป็นหน้าผาหินปูนสูงตระหง่าน เปิดให้เข้าชมเพียง 6 เดือนต่อปีเท่านั้น เพื่อรักษาความบริสุทธิ์ของธรรมชาติ',
+                history: 'เกาะเหลาเหลียง เป็นหมู่เกาะหินปูนแฝด จุดเด่นคือภูเขาหินปูนที่ตั้งตระหง่านโอบล้อมหาดทรายขาวสะอาดตาไว้ การจัดการท่องเที่ยวบนเกาะนี้เป็นแบบสัมปทานเชิงอนุรักษ์ มีที่พักในรูปแบบ "แคมป์ปิ้ง" เท่านั้น',
+                activities: ['แคมป์ปิ้งริมทะเล', 'พายคายัค', 'ปีนหน้าผา', 'ดำน้ำดูปะการัง'],
+                hotels: [
+                    { name: 'Laoliang Beach Resort', desc: 'เต็นท์แคมป์ปิ้งขนาดใหญ่ (ต้องจองล่วงหน้า)' }
+                ],
+                contactName: 'Laoliang Beach',
+                phone: '081-894-6936',
+                pier: 'ท่าเรือตะเซะ อ.ปะเหลียน'
+            },
+            {
+                id: 'rok',
+                name: 'เกาะรอก',
+                subtitle: 'ราชินีอันดามัน น้ำใส ทรายขาวราวแป้ง',
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPCgoIXIkZb-4wP2ADzl56XQppRdJ3HUgotQ&s',
+                heroImage: 'https://wearekrabi.com/wp-content/uploads/2020/09/12-%E0%B9%80%E0%B8%81%E0%B8%B2%E0%B8%B0%E0%B8%A3%E0%B8%AD%E0%B8%81-4-1024x682.jpg',
+                invite: 'ถ้าคุณรักน้ำทะเลสีฟ้าเทอร์ควอยซ์ใสจนเห็นเงาเรือ และหาดทรายที่ขาวละเอียดนุ่มเท้าเหมือนแป้งฝุ่น คุณต้องมา "เกาะรอก" สวรรค์ของการพักผ่อนที่แท้จริง',
+                history: 'เกาะรอก ประกอบด้วยเกาะรอกใน และเกาะรอกนอก อยู่ในเขตอุทยานแห่งชาติหมู่เกาะลันตา แต่อยู่กึ่งกลางระหว่างทะเลตรังและกระบี่ เกาะรอกขึ้นชื่อเรื่องความขาวละเอียดของหาดทรายที่เนียนละเอียดมากที่สุดแห่งหนึ่งในไทย น้ำทะเลใสแจ๋ว และแนวปะการังรอบเกาะอุดมสมบูรณ์',
+                activities: ['เดินเล่นหาดทรายขาว', 'ดำน้ำตื้นรอบเกาะ', 'ปิกนิกริมชายหาด'],
+                hotels: [
+                    { name: 'ลานกางเต็นท์อุทยานฯ', desc: 'มีพื้นที่กางเต็นท์และบ้านพักอุทยาน (จองล่วงหน้า)' }
+                ],
+                contactName: 'อุทยานแห่งชาติหมู่เกาะลันตา',
+                phone: '075-660-711',
+                pier: 'ท่าเรือปากเมง จ.ตรัง'
+            },
+            {
+                id: 'takiang',
+                name: 'เกาะตะเกียง',
+                subtitle: 'ประภาคารเก่าแก่ ปะการังน้ำตื้นสมบูรณ์',
+                image: 'https://cbtthailand.dasta.or.th/upload-file-api/Resources/RelateAttraction/Images/RAT920013/1.jpeg',
+                heroImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTomYIpxXExu1ta9zJW_xDkRM003HGWeXRxdw&s',
+                invite: 'เกาะเล็กๆ ที่ซ่อนตัวอยู่ทางตอนใต้ของทะเลตรัง โดดเด่นด้วยประภาคารคอยบอกทางเรือ เป็นเกาะที่สงบเงียบ คนไม่พลุกพล่าน',
+                history: 'เกาะตะเกียง เป็นเกาะเล็กๆ ที่ตั้งอยู่ใกล้กับเกาะเหลาเหลียง บนเกาะมีประภาคารตั้งโดดเด่นอยู่บนยอดเขา ชายหาดมีขนาดไม่ใหญ่นักแต่น้ำทะเลใสสะอาด และใต้น้ำมีแนวปะการังเขากวางที่ยังคงความสมบูรณ์',
+                activities: ['ดำน้ำตื้นชมปะการัง', 'ถ่ายรูปกับประภาคาร', 'พักผ่อนเงียบๆ'],
+                hotels: [
+                    { name: 'ไม่มีที่พักบนเกาะ', desc: 'ไม่อนุญาตให้ค้างคืน' }
+                ],
+                contactName: 'อุทยานแห่งชาติหมู่เกาะเภตรา',
+                phone: '074-783-485',
+                pier: 'ท่าเรือตะเซะ อ.ปะเหลียน'
+            }
+        ];
+
+        // Database of 6 Hotels
+        const hotelsData = [
+            {
+                id: 'ht1',
+                name: 'The Sevenseas Resort',
+                location: 'เกาะกระดาน',
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLo_Ct7RgQxnzU56ARN51jMFIQaFaY70l30Q&s',
+                shortDesc: 'รีสอร์ทหรูติดหาดทรายขาว บรรยากาศพรีเมียม สระว่ายน้ำกลางแจ้ง',
+                longDesc: 'The Sevenseas Resort นำเสนอประสบการณ์การพักผ่อนระดับไฮเอนด์บน "เกาะกระดาน" ด้วยห้องพักวิลล่าที่ออกแบบอย่างหรูหรากลมกลืนกับธรรมชาติ มองเห็นวิวทะเลอันดามันแบบพาโนรามา ไฮไลท์คือสระว่ายน้ำกลางแจ้งริมชายหาดที่สวยงาม และบริการระดับพรีเมียม คุณสามารถเดินลงเล่นน้ำทะเลใสและดำน้ำดูปะการังได้ทันทีจากหน้าหาดส่วนตัวของรีสอร์ท',
+                facilities: ['สระว่ายน้ำริมหาด', 'ห้องอาหารนานาชาติ', 'Wi-Fi ฟรี', 'สปาและนวดแผนไทย', 'บาร์ริมหาด', 'บริการเรือรับ-ส่ง', 'แอร์คอนดิชัน'],
+                contact: '075-815-555'
+            },
+            {
+                id: 'ht2',
+                name: 'Sivalai Beach Resort',
+                location: 'เกาะมุก',
+                image: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/764376524.jpg?k=14366e48c75809246209dab2329157080802240101c2970d989bc9475da5c16a&o=',
+                shortDesc: 'ตั้งอยู่บนแหลมทรายที่สวยที่สุด ชมวิวน้ำทะเลได้ 2 ฝั่ง ซ้ายและขวา',
+                longDesc: 'เกาะมุก สิวาลัย บีช รีสอร์ท เป็นที่พักที่โดดเด่นที่สุดบนเกาะมุก ตั้งอยู่บนหัวแหลมทรายที่ยื่นออกไปในทะเล ทำให้สามารถชมพระอาทิตย์ขึ้นและตกได้จากในรีสอร์ท ห้องพักเป็นสไตล์วิลล่าหลังเดี่ยวให้ความเป็นส่วนตัวสูง ท่ามกลางทิวมะพร้าวร่มรื่น และล้อมรอบด้วยหาดทรายขาวเนียนละเอียดที่ยาวสุดลูกหูลูกตา',
+                facilities: ['สระว่ายน้ำ 2 สระ', 'ห้องอาหารริมหาด', 'ทัวร์ถ้ำมรกต', 'จักรยานให้เช่า', 'นวดริมหาด', 'Wi-Fi ฟรี'],
+                contact: '081-893-XXXX'
+            },
+            {
+                id: 'ht3',
+                name: 'Andalay Beach Resort',
+                location: 'เกาะลิบง',
+                image: 'https://images.trvl-media.com/lodging/12000000/11980000/11975200/11975117/8beb8731.jpg?impolicy=resizecrop&rw=575&rh=575&ra=fill',
+                shortDesc: 'ที่พักสไตล์บูทีคสุดชิค ริมทะเลเกาะลิบง แหล่งดูพะยูน',
+                longDesc: 'อันดาลัย บีช รีสอร์ท คือโอเอซิสแห่งการพักผ่อนบนเกาะลิบง ตกแต่งในสไตล์ทรอปิคอลบูทีคที่สวยงามลงตัว พร้อมสระว่ายน้ำระบบเกลือที่ตั้งขนานไปกับวิวทะเล มองออกไปเห็นเกาะมุกอยู่ฝั่งตรงข้าม ที่นี่เน้นความสงบ เป็นส่วนตัว และมีบริการพานั่งเรือหางยาวไปชมฝูงพะยูนอย่างใกล้ชิด',
+                facilities: ['สระว่ายน้ำส่วนตัว', 'ร้านอาหารวิวทะเล', 'ทัวร์ดูพะยูน', 'กิจกรรมพายคายัค', 'Wi-Fi', 'มินิบาร์'],
+                contact: '095-123-XXXX'
+            },
+            {
+                id: 'ht4',
+                name: 'Thanya Beach Resort',
+                location: 'เกาะไหง',
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAHKaVpPE1VDtLxBc7n428jmLlUDR4mvKIjw&s',
+                shortDesc: 'รีสอร์ทไม้สไตล์ทรอปิคอล ร่มรื่น เงียบสงบ หาดส่วนตัว',
+                longDesc: 'ธัญญา บีช รีสอร์ท บนเกาะไหง นำเสนอความเงียบสงบอย่างแท้จริง บ้านพักสร้างจากวัสดุธรรมชาติกลมกลืนกับป่าเขตร้อนด้านหลัง และหันหน้าเข้าสู่ทะเลอันดามันสีฟ้าครามด้านหน้า เป็นสถานที่ที่คุณสามารถตัดขาดจากความวุ่นวาย นั่งอ่านหนังสือริมหาด หรือสวมแว่นตาลงไปดำน้ำดูปลาการ์ตูนที่หน้าหาดได้เลย',
+                facilities: ['ห้องอาหารไม้ไผ่', 'บริการดำน้ำตื้น', 'เก้าอี้ชายหาด', 'Wi-Fi', 'เครื่องปรับอากาศ', 'ระเบียงส่วนตัว'],
+                contact: '086-456-XXXX'
+            },
+            {
+                id: 'ht5',
+                name: 'Yataa Resort',
+                location: 'เกาะสุกร (เกาะหมู)',
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHMAYut7_2J55L2GgsB6V0FLJMgeziE18eWQ&s',
+                shortDesc: 'รีสอร์ทดีไซน์ทันสมัยที่สุดบนเกาะสุกร พร้อมสระว่ายน้ำขนาดใหญ่',
+                longDesc: 'ญาตา รีสอร์ท เป็นที่พักที่ผสมผสานความโมเดิร์นเข้ากับวิถีชีวิตชาวเลของเกาะสุกรได้อย่างลงตัว มีสระว่ายน้ำขนาดใหญ่ตั้งอยู่กลางรีสอร์ท ห้องพักกว้างขวาง สะอาด บรรยากาศโดยรอบเงียบสงบ ทางรีสอร์ทมีบริการรถรับส่ง และจัดการท่องเที่ยวรอบเกาะ เช่น พาชมทุ่งนา ปั่นจักรยาน และชิมแตงโมเกาะสุกรชื่อดัง',
+                facilities: ['สระว่ายน้ำกลางแจ้ง', 'ห้องอาหาร', 'เช่ารถซาเล้ง/จักรยาน', 'แอร์', 'Wi-Fi ฟรี', 'Smart TV'],
+                contact: '089-789-XXXX'
+            },
+            {
+                id: 'ht6',
+                name: 'Koh Hai Fantasy Resort & Spa',
+                location: 'เกาะไหง',
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqwnYg8HI4AUJokVXJAsBZIhrLBvRZuRjqVg&s',
+                shortDesc: 'รีสอร์ทขนาดใหญ่ที่ครบเครื่องที่สุดบนเกาะไหง เหมาะกับครอบครัว',
+                longDesc: 'เกาะไหง แฟนตาซี รีสอร์ท แอนด์ สปา เป็นรีสอร์ทขนาดใหญ่ที่ตั้งอยู่บนชายหาดที่สวยที่สุดของเกาะ มีห้องพักให้เลือกหลากหลายรูปแบบเพื่อรองรับนักท่องเที่ยวทุกกลุ่ม โดยเฉพาะกลุ่มครอบครัว มีสระว่ายน้ำกว้างขวาง สปาชั้นเลิศ และห้องอาหารริมทะเลที่ให้บริการอาหารทะเลสดๆ ท่ามกลางบรรยากาศสุดโรแมนติก',
+                facilities: ['สระว่ายน้ำ 2 สระ', 'สปาครบวงจร', 'ร้านอาหารริมหาด', 'ศูนย์กิจกรรมทางน้ำ', 'มินิมาร์ทในตัว', 'Wi-Fi'],
+                contact: '075-210-XXXX'
+            }
+        ];
+
+
+        // ------------------ LOGIC SECTION ------------------ //
+
+        // Render Islands on Home Page
+        function renderIslands() {
+            const grid = document.getElementById('islands-grid');
+            grid.innerHTML = ''; // clear
+
+            islandsData.forEach((island, index) => {
+                const delay = (index % 4) * 100;
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 cursor-pointer group flex flex-col h-full border border-gray-100';
+                card.setAttribute('data-aos', 'fade-up');
+                card.setAttribute('data-aos-delay', delay.toString());
+                card.onclick = () => showIsland(island.id);
+                
+                card.innerHTML = `
+                    <div class="h-56 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-10 transition duration-500 z-10"></div>
+                        <img src="${island.image}" alt="${island.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute bottom-4 left-4 z-20">
+                            <span class="bg-primary/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">แนะนำ</span>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2 group-hover:text-primary transition">${island.name}</h3>
+                        <p class="text-sm text-accent font-medium mb-3">${island.subtitle}</p>
+                        <p class="text-gray-500 text-sm line-clamp-3 mb-6 flex-grow leading-relaxed">${island.invite}</p>
+                        <div class="flex items-center text-primary font-semibold text-sm group-hover:text-secondary mt-auto">
+                            <span>ดูรายละเอียด</span>
+                            <i class="fa-solid fa-arrow-right-long ml-2 transform group-hover:translate-x-2 transition duration-300"></i>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Render Hotels on Hotels View
+        function renderHotels() {
+            const grid = document.getElementById('hotels-grid');
+            grid.innerHTML = '';
+
+            hotelsData.forEach((hotel, index) => {
+                const delay = (index % 2) * 100;
+                const card = document.createElement('div');
+                card.className = 'flex flex-col sm:flex-row bg-gray-50 rounded-3xl overflow-hidden border border-gray-100 hover:shadow-lg transition cursor-pointer group';
+                card.setAttribute('data-aos', 'fade-up');
+                card.setAttribute('data-aos-delay', delay.toString());
+                card.onclick = () => showHotelModal(hotel.id);
+
+                card.innerHTML = `
+                    <div class="w-full sm:w-2/5 h-48 sm:h-auto overflow-hidden">
+                        <img src="${hotel.image}" alt="${hotel.name}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+                    </div>
+                    <div class="p-6 w-full sm:w-3/5 flex flex-col justify-center bg-white group-hover:bg-blue-50/30 transition">
+                        <h3 class="text-xl font-bold text-gray-800 mb-1 group-hover:text-primary transition">${hotel.name}</h3>
+                        <p class="text-sm text-primary mb-3"><i class="fa-solid fa-location-dot mr-1"></i> ${hotel.location}</p>
+                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">${hotel.shortDesc}</p>
+                        <button class="mt-auto self-start bg-blue-50 text-secondary font-medium px-4 py-2 rounded-full text-sm group-hover:bg-primary group-hover:text-white transition flex items-center shadow-sm">
+                            ดูรายละเอียด <i class="fa-solid fa-arrow-right text-xs ml-2"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // View Island Detail
+        function showIsland(id) {
+            const island = islandsData.find(i => i.id === id);
+            if (!island) return;
+
+            // Populate Detail View
+            document.getElementById('detail-hero').style.backgroundImage = `url('${island.heroImage}')`;
+            document.getElementById('detail-title').innerText = island.name;
+            document.getElementById('detail-subtitle').innerText = island.subtitle;
+            document.getElementById('detail-invite').innerText = island.invite;
+            document.getElementById('detail-history').innerText = island.history;
+            
+            // Populate Activities
+            const activitiesList = document.getElementById('detail-activities');
+            activitiesList.innerHTML = '';
+            island.activities.forEach(activity => {
+                const div = document.createElement('div');
+                div.className = 'flex items-start bg-gray-50 p-4 rounded-xl border border-gray-100';
+                div.innerHTML = `
+                    <div class="text-accent mt-1 mr-3"><i class="fa-solid fa-check-circle"></i></div>
+                    <p class="text-gray-700 font-medium">${activity}</p>
+                `;
+                activitiesList.appendChild(div);
+            });
+
+            // Populate Hotels Mini-List
+            const hotelsList = document.getElementById('detail-hotels');
+            hotelsList.innerHTML = '';
+            island.hotels.forEach(hotel => {
+                const li = document.createElement('li');
+                li.className = 'flex flex-col bg-gray-50 p-4 rounded-xl border border-gray-100 hover:border-primary transition group cursor-pointer';
+                li.onclick = () => showView('hotels-view'); // Redirect to hotels page when clicked
+                li.innerHTML = `
+                    <span class="font-bold text-gray-800 flex items-center group-hover:text-primary transition">
+                        <i class="fa-solid fa-bed text-gray-400 mr-2 text-sm group-hover:text-primary transition"></i>
+                        ${hotel.name}
+                    </span>
+                    <span class="text-sm text-gray-500 mt-2 pl-6 leading-relaxed">${hotel.desc}</span>
+                `;
+                hotelsList.appendChild(li);
+            });
+
+            // Populate Contact
+            document.getElementById('detail-contact-name').innerText = island.contactName;
+            document.getElementById('detail-phone').innerText = island.phone;
+            document.getElementById('detail-pier-text').innerText = island.pier;
+
+            showView('detail-view');
+        }
+
+        // --- HOTEL MODAL FUNCTIONS ---
+        function showHotelModal(id) {
+            const hotel = hotelsData.find(h => h.id === id);
+            if (!hotel) return;
+
+            // Populate Modal
+            document.getElementById('modal-hotel-img').src = hotel.image;
+            document.getElementById('modal-hotel-name').innerText = hotel.name;
+            document.getElementById('modal-hotel-location').innerText = hotel.location;
+            document.getElementById('modal-hotel-desc').innerText = hotel.longDesc;
+            document.getElementById('modal-hotel-contact').innerText = hotel.contact;
+
+            // Populate Facilities
+            const facContainer = document.getElementById('modal-hotel-fac');
+            facContainer.innerHTML = '';
+            hotel.facilities.forEach(fac => {
+                facContainer.innerHTML += `<span class="bg-blue-100 text-secondary px-4 py-2 rounded-full text-sm font-medium border border-blue-200"><i class="fa-solid fa-check mr-1 opacity-50"></i> ${fac}</span>`;
+            });
+
+            // Display Modal with Animation
+            const modal = document.getElementById('hotel-modal');
+            const content = document.getElementById('hotel-modal-content');
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // trigger reflow
+            void modal.offsetWidth;
+            
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+            
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeHotelModal() {
+            const modal = document.getElementById('hotel-modal');
+            const content = document.getElementById('hotel-modal-content');
+            
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = 'auto'; // Restore scroll
+            }, 300);
+        }
+
+        // View Router
+        function showView(viewId) {
+            // Updated array of all views
+            const views = ['home-view', 'detail-view', 'food-view', 'hotels-view', 'contact-view'];
+            
+            views.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+            
+            const target = document.getElementById(viewId);
+            if (target) target.classList.remove('hidden');
+            
+            // Close mobile menu
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('mobile-menu-icon');
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                menuIcon.classList.remove('fa-xmark');
+                menuIcon.classList.add('fa-bars');
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => { AOS.refresh(); }, 50);
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('mobile-menu-icon');
+            
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                menu.classList.add('hidden');
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        function goHome() {
+            showView('home-view');
+        }
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            renderIslands();
+            renderHotels();
+        });
+    </script>
+</body>
+</html>
